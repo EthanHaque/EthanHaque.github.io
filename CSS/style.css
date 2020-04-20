@@ -53,4 +53,16 @@ li a {
     transform: translate(-50%, -50%);
 }
 
+.icons {
+    text-align: center;
+}
 
+a{
+text-decoration: none;
+color: black;
+}
+
+a:visited{
+text-decoration: none;
+color: black;
+}
