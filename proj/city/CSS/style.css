@@ -17,8 +17,19 @@ body {
 .second {
     width: 100%;
     background-color: black;
-    color:white;
+    color: white;
     margin: 0px;
+}
+
+.fourth {
+    color: white;
+    background-color: black;
+}
+
+.map {
+    width: 70%;
+    display: block;
+    margin: auto;
 }
 
 .vision {
@@ -53,6 +64,9 @@ body {
 
 .row {
     display: flex;
+    justify-content: left;
+    align-items: center;
+    padding: 2%;
 }
 
 .column {
@@ -60,6 +74,20 @@ body {
     width: 50%;
     height: 50%;
     overflow: hidden;
+}
+
+.columnt {
+    flex: 1;
+    width: 33%;
+    height: 50%;
+    padding: 1%;
+    overflow: hidden;
+}
+
+.columnt img {
+    padding: 10px;
+    height: auto;
+    width: 100%;
 }
 
 .column p {
@@ -107,37 +135,47 @@ body {
 
 .fade {
     animation: fadein 2s;
-    -moz-animation: fadein 2s; /* Firefox */
-    -webkit-animation: fadein 2s; /* Safari and Chrome */
-    -o-animation: fadein 2s; /* Opera */
+    -moz-animation: fadein 2s;
+    /* Firefox */
+    -webkit-animation: fadein 2s;
+    /* Safari and Chrome */
+    -o-animation: fadein 2s;
+    /* Opera */
 }
+
 @keyframes fadein {
     from {
-        opacity:0;
+        opacity: 0;
     }
     to {
-        opacity:1;
+        opacity: 1;
     }
 }
-@-moz-keyframes fadein { /* Firefox */
+
+@-moz-keyframes fadein {
+    /* Firefox */
     from {
-        opacity:0;
+        opacity: 0;
     }
     to {
-        opacity:1;
+        opacity: 1;
     }
 }
-@-webkit-keyframes fadein { /* Safari and Chrome */
+
+@-webkit-keyframes fadein {
+    /* Safari and Chrome */
     from {
-        opacity:0;
+        opacity: 0;
     }
     to {
-        opacity:1;
+        opacity: 1;
     }
 }
-@-o-keyframes fadein { /* Opera */
+
+@-o-keyframes fadein {
+    /* Opera */
     from {
-        opacity:0;
+        opacity: 0;
     }
     to {
         opacity: 1;
