@@ -39,6 +39,10 @@ body {
     color: white;
 }
 
+.seventh {
+    color: black;
+}
+
 .map {
     width: 70%;
     display: block;
