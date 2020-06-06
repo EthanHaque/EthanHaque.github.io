@@ -7,12 +7,13 @@ ul {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    position: -webkit-sticky; /* Safari */
+    position: -webkit-sticky;
+    /* Safari */
     position: sticky;
     top: 0;
     background-color: white;
 }
-  
+
 li {
     float: left;
 }
@@ -43,7 +44,6 @@ li a {
     top: 50%;
     left: 2.5%;
     transform: translate(0%, -50%);
-
 }
 
 .centervh {
@@ -57,12 +57,12 @@ li a {
     text-align: center;
 }
 
-a{
-text-decoration: none;
-color: black;
+a {
+    text-decoration: none;
+    color: black;
 }
 
-a:visited{
-text-decoration: none;
-color: black;
+a:visited {
+    text-decoration: none;
+    color: black;
 }
