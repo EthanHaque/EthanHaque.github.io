@@ -1,6 +1,0 @@
-body {
-    --color-text: #0f070a;
-    --color-bg: #5096ff;
-    --color-bg-2: #4af9c4;
-    background: radial-gradient(ellipse at 100% 0, #5096ff 0, var(--color-bg) 50%, var(--color-bg-2) 115%)
-}
