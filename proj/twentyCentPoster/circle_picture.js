@@ -19,7 +19,7 @@ var leftPadding;
 var topPadding;
 
 function preload() {
-    img = loadImage('castro2.jpg');
+    img = loadImage('./assets/images/castro2.jpg');
 }
 
 function windowResized() {
