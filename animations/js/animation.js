@@ -4,9 +4,9 @@ var points, lineMeshes;
 var options = function() {
     this.noOfLines = 50;
     this.numOfPoints = 400;
-    this.lineColor = new THREE.Color(0x09BC8A);
+    this.lineColor = 0x09BC8A;
     this.lineWidth = 1;
-    this.backgroundColor = new THREE.Color(0x071A2A);
+    this.backgroundColor = 0x071A2A;
     this.distanceFromScene = this.numOfPoints / 2;
     this.zRotation = Math.PI / 6;
     this.xRotation = 0;
@@ -60,7 +60,7 @@ function init() {
     camera.rotation.z = options.zRotation;
 
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x071A2A);
+    scene.background = new THREE.Color(options.backgroundColor);
 
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
@@ -85,19 +85,12 @@ function updateLineRotation() {
 
 function updateLineColor() {
     for (var i = 0; i < lineMeshes.length; i++) {
-        console.log(lineMeshes[i].material.color);
-        lineMeshes[i].material.color.r = options.lineColor.r / 255;
-        lineMeshes[i].material.color.b = options.lineColor.b / 255;
-        lineMeshes[i].material.color.g = options.lineColor.g / 255;
-        console.log(lineMeshes[i].material.color);
-
+        lineMeshes[i].material.color.set(options.lineColor);
     }
 }
 
 function updateBackgroundColor() {
-    scene.background.r = options.backgroundColor.r / 255;
-    scene.background.b = options.backgroundColor.b / 255;
-    scene.background.g = options.backgroundColor.g / 255;
+    scene.background.set(options.backgroundColor);
 }
 
 function changeDistance() {
@@ -121,7 +114,7 @@ function createLine(pos) {
 
     const material = new MeshLineMaterial({
         lineWidth: options.lineWidth,
-        color: 0x09BC8A
+        color: new THREE.Color(options.lineColor)
     });
 
     var mesh = new THREE.Mesh(geometry, material);
