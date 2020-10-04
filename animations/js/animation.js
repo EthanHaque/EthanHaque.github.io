@@ -30,10 +30,10 @@ function init() {
     gui.add(options, "distanceFromScene", 0, 5000).onChange(changeDistance);
 
     const linesFolder = gui.addFolder("Lines");
-    linesFolder.add(options, "noOfLines", 0, 500).onChange(updateLineMeshArray);
-    linesFolder.add(options, "numOfPoints", 0, 1000).onChange(updateLineMeshArray);
+    linesFolder.add(options, "noOfLines", 0, 5000).onChange(updateLineMeshArray);
+    linesFolder.add(options, "numOfPoints", 0, 10000).onChange(updateLineMeshArray);
     linesFolder.add(options, "spacingFactor", 0, 100).onChange(updateLinePosition);
-    linesFolder.add(options, "lineWidth", 0, 10).onChange(updateLineMeshArray);
+    linesFolder.add(options, "lineWidth", 0, 100).onChange(updateLineMeshArray);
     linesFolder.addColor(options, "lineColor").onChange(updateLineColor);
 
 
