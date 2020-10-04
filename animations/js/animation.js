@@ -5,6 +5,7 @@ var options = function() {
     this.noOfLines = 50;
     this.numOfPoints = 400;
     this.lineColor = new THREE.Color(0x09BC8A);
+    this.lineWidth = 1;
     this.backgroundColor = new THREE.Color(0x071A2A);
     this.distanceFromScene = this.numOfPoints / 2;
     this.zRotation = Math.PI / 6;
@@ -31,8 +32,10 @@ function init() {
     const linesFolder = gui.addFolder("Lines");
     linesFolder.add(options, "noOfLines", 0, 500).onChange(updateLineMeshArray);
     linesFolder.add(options, "numOfPoints", 0, 1000).onChange(updateLineMeshArray);
-    linesFolder.addColor(options, "lineColor").onChange(updateLineColor);
     linesFolder.add(options, "spacingFactor", 0, 100).onChange(updateLinePosition);
+    linesFolder.add(options, "lineWidth", 0, 10).onChange(updateLineMeshArray);
+    linesFolder.addColor(options, "lineColor").onChange(updateLineColor);
+
 
     const rotationFolder = gui.addFolder("Rotation");
     rotationFolder.add(options, "xRotation", 0, 2 * Math.PI).onChange(updateLineRotation);
@@ -80,7 +83,6 @@ function updateLineRotation() {
     }
 }
 
-
 function updateLineColor() {
     for (var i = 0; i < lineMeshes.length; i++) {
         console.log(lineMeshes[i].material.color);
@@ -118,7 +120,7 @@ function createLine(pos) {
     const geometry = line.geometry;
 
     const material = new MeshLineMaterial({
-        lineWidth: 1,
+        lineWidth: options.lineWidth,
         color: 0x09BC8A
     });
 
