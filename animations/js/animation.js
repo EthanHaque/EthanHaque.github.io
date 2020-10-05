@@ -2,20 +2,20 @@ var canvas, renderer, scene, camera;
 var points, lineMeshes;
 
 var options = function() {
-    this.noOfLines = 50;
-    this.numOfPoints = 400;
-    this.lineColor = 0x09BC8A;
-    this.lineWidth = 1;
-    this.backgroundColor = 0x071A2A;
+    this.noOfLines = 125;
+    this.numOfPoints = 800;
+    this.lineColor = 0x000000;
+    this.lineWidth = 1.5;
+    this.backgroundColor = 0xffffff;
     this.distanceFromScene = this.numOfPoints / 2;
-    this.zRotation = Math.PI / 6;
+    this.zRotation = Math.PI / 4;
     this.xRotation = 0;
     this.yRotation = 0;
     this.timeSlowFactor = 8000;
     this.xSlowFactor = 200;
     this.ySlowFactor = 50;
-    this.amplitude = 200;
-    this.spacingFactor = 10;
+    this.amplitude = 150;
+    this.spacingFactor = 8;
 }
 
 function init() {
@@ -168,7 +168,7 @@ function render(time) {
         var positions = lineMeshes[j].geometry.attributes.position.array;
         for (var i = 0; i < positions.length / 3; i++) {
             var x = i / options.xSlowFactor + time / options.timeSlowFactor
-            var y = j / options.ySlowFactor
+            var y = j / options.ySlowFactor + time / options.timeSlowFactor
 
             positions[i * 3 + 1] = options.amplitude * noise.perlin2(x, y);
         }
