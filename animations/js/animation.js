@@ -11,9 +11,10 @@ var options = function() {
     this.zRotation = Math.PI / 4;
     this.xRotation = 0;
     this.yRotation = 0;
-    this.timeSlowFactor = 8000;
-    this.xSlowFactor = 200;
-    this.ySlowFactor = 50;
+    this.xTimeSlowFactor = 8000;
+    this.yTimeSlowFactor = 8000;
+    this.xSmoothFactor = 200;
+    this.ySmoothFactor = 50;
     this.amplitude = 150;
     this.spacingFactor = 10;
 }
@@ -43,9 +44,10 @@ function init() {
     rotationFolder.add(options, "zRotation", 0, 2 * Math.PI).onChange(updateLineRotation);
 
     const speedFolder = gui.addFolder("Speed");
-    speedFolder.add(options, "timeSlowFactor", 0, 20000);
-    speedFolder.add(options, "xSlowFactor", 0, 1000);
-    speedFolder.add(options, "ySlowFactor", 0, 1000);
+    speedFolder.add(options, "xTimeSlowFactor", 0, 20000);
+    speedFolder.add(options, "yTimeSlowFactor", 0, 20000);
+    speedFolder.add(options, "xSmoothFactor", 0, 1000);
+    speedFolder.add(options, "ySmoothFactor", 0, 1000);
     speedFolder.add(options, "amplitude", 0, 1000);
 
 
@@ -167,10 +169,10 @@ function render(time) {
     for (var j = 0; j < lineMeshes.length; j++) {
         var positions = lineMeshes[j].geometry.attributes.position.array;
         for (var i = 0; i < positions.length / 3; i++) {
-            var x = i / options.xSlowFactor + time / options.timeSlowFactor
-            var y = j / options.ySlowFactor + time / options.timeSlowFactor
+            var x = i / options.xSmoothFactor + time / options.xTimeSlowFactor
+            var y = j / options.ySmoothFactor + time / options.yTimeSlowFactor
 
-            positions[i * 3 + 1] = options.amplitude * noise.perlin2(x, y);
+            positions[i * 3 + 1] = options.amplitude * noise.perlin2(x, y) + 1;
         }
         lineMeshes[j].geometry.attributes.position.needsUpdate = true;
     }
