@@ -15,7 +15,7 @@ var options = function() {
     this.xSlowFactor = 200;
     this.ySlowFactor = 50;
     this.amplitude = 150;
-    this.spacingFactor = 8;
+    this.spacingFactor = 10;
 }
 
 function init() {
