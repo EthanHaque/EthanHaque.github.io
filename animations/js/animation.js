@@ -114,7 +114,7 @@ function createLine(pos) {
         ));
     }
 
-    const linePoints = new THREE.BufferGeometry().setFromPoints(new THREE.SplineCurve(points).getPoints(100));
+    const linePoints = new THREE.BufferGeometry().setFromPoints(new THREE.SplineCurve(points).getPoints(500));
     // const linePoints = new THREE.BufferGeometry().setFromPoints(points);
     var line;
 
