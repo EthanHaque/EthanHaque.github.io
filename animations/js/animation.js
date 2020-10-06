@@ -1,5 +1,6 @@
 var canvas, renderer, scene, camera;
 var points, lineMeshes;
+var gui;
 
 var options = function() {
     this.numOfLines = Math.floor(canvas.clientHeight / 50);
@@ -20,6 +21,8 @@ var options = function() {
     this.amplitude = 90;
     this.spacingFactor = 70;
     this.useMesh = false;
+    this.importSettings = importSettings;
+    this.summary = "";
 }
 
 function init() {
@@ -29,8 +32,9 @@ function init() {
     noise.seed(2);
 
     options = new options();
+    createSummary();
 
-    const gui = new dat.GUI({ autoPlace: true });
+    gui = new dat.GUI({ autoPlace: true });
 
     gui.addColor(options, "backgroundColor").onChange(updateBackgroundColor);
 
@@ -55,14 +59,16 @@ function init() {
     rotationFolder.add(options, "zRotation", 0, 2 * Math.PI).onChange(updateLineRotation);
 
     const speedFolder = gui.addFolder("Speed");
-    speedFolder.add(options, "xTimeSlowFactor", 0, 20000);
-    speedFolder.add(options, "yTimeSlowFactor", 0, 20000);
-    speedFolder.add(options, "xSmoothFactor", 0, 1000);
-    speedFolder.add(options, "ySmoothFactor", 0, 1000);
-    speedFolder.add(options, "amplitude", 0, 1000);
+    speedFolder.add(options, "xTimeSlowFactor", 0, 20000).onChange(updateSummaryBox);
+    speedFolder.add(options, "yTimeSlowFactor", 0, 20000).onChange(updateSummaryBox);
+    speedFolder.add(options, "xSmoothFactor", 0, 1000).onChange(updateSummaryBox);
+    speedFolder.add(options, "ySmoothFactor", 0, 1000).onChange(updateSummaryBox);
+    speedFolder.add(options, "amplitude", 0, 1000).onChange(updateSummaryBox);
 
     gui.add(options, "useMesh").onChange(updateLineMeshArray);
 
+    gui.add(options, "summary");
+    gui.add(options, "importSettings");
 
 
     renderer = new THREE.WebGLRenderer({
@@ -90,6 +96,53 @@ function init() {
 
 }
 
+function importSettings() {
+    readInSummary();
+    updateLineMeshArray();
+    updateBackgroundColor();
+    changeDistance();
+    updateLineRotation();
+    updateLineColor();
+    updateSummaryBox();
+}
+
+function updateSummaryBox() {
+    createSummary()
+    for (var i in gui.__controllers) {
+        gui.__controllers[i].updateDisplay();
+    }
+    for (var i = 0; i < Object.keys(gui.__folders).length; i++) {
+        var key = Object.keys(gui.__folders)[i];
+        for (var j = 0; j < gui.__folders[key].__controllers.length; j++) {
+            gui.__folders[key].__controllers[j].updateDisplay();
+        }
+    }
+
+}
+
+function createSummary() {
+    var str = "";
+    for (var option in options) {
+        if (option !== "summary") {
+            str += option + ":" + options[option] + ","
+        }
+    }
+    options.summary = str.slice(0, -1);
+}
+
+function readInSummary() {
+    var strArr = options.summary.split(",");
+    for (var i = 0; i < strArr.length; i++) {
+        var pair = strArr[i].split(":");
+        if (!isNaN(parseFloat(pair[1]))) {
+            options[pair[0]] = parseFloat(pair[1]);
+        } else if (pair[0] === "true" || pair[0] === "false") {
+            options[pair[0]] = (pair[0] === "true" ? true : false);
+        }
+    }
+
+}
+
 function updateLineRotation() {
     for (var i = 0; i < lineMeshes.length; i++) {
         lineMeshes[i].rotation.x = options.xRotation;
@@ -106,10 +159,12 @@ function updateLineColor() {
 
 function updateBackgroundColor() {
     scene.background.set(options.backgroundColor);
+    updateSummaryBox()
 }
 
 function changeDistance() {
     camera.position.set(options.horizontal, options.vertical, options.distanceFromScene);
+    updateSummaryBox()
 }
 
 function createLine(pos) {
@@ -158,6 +213,7 @@ function updateLinePosition() {
     for (var i = 0; i < lineMeshes.length; i++) {
         lineMeshes[i].position.y = i * options.spacingFactor - options.numOfLines * options.spacingFactor / 2;
     }
+    updateSummaryBox()
 }
 
 function updateLineMeshArray() {
@@ -172,6 +228,7 @@ function updateLineMeshArray() {
         lineMeshes.push(line);
         scene.add(line);
     }
+    updateSummaryBox();
 }
 
 function onWindowResize() {
