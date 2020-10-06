@@ -115,6 +115,7 @@ function createLine(pos) {
     }
 
     const linePoints = new THREE.BufferGeometry().setFromPoints(new THREE.SplineCurve(points).getPoints(100));
+    // const linePoints = new THREE.BufferGeometry().setFromPoints(points);
     var line;
 
     if (options.useMesh) {
@@ -133,7 +134,7 @@ function createLine(pos) {
         const material = new THREE.LineBasicMaterial({
             color: new THREE.Color(options.lineColor)
         });
-
+        linePoints.computeBoundingSphere();
         line = new THREE.Line(linePoints, material);
         line.position.x = -options.numOfPoints / 2;
         line.position.y = pos * options.spacingFactor - options.numOfLines * options.spacingFactor / 2;
