@@ -2,21 +2,22 @@ var canvas, renderer, scene, camera;
 var points, lineMeshes;
 
 var options = function() {
-    this.noOfLines = 125;
-    this.numOfPoints = 800;
+    this.numOfLines = 50;
+    this.numOfPoints = 8000;
     this.lineColor = 0x000000;
     this.lineWidth = 1.5;
     this.backgroundColor = 0xffffff;
     this.distanceFromScene = this.numOfPoints / 2;
-    this.zRotation = Math.PI / 4;
+    this.zRotation = 0;
     this.xRotation = 0;
     this.yRotation = 0;
-    this.xTimeSlowFactor = 8000;
-    this.yTimeSlowFactor = 8000;
-    this.xSmoothFactor = 200;
-    this.ySmoothFactor = 50;
-    this.amplitude = 150;
-    this.spacingFactor = 10;
+    this.xTimeSlowFactor = 1000;
+    this.yTimeSlowFactor = 1000;
+    this.xSmoothFactor = 2;
+    this.ySmoothFactor = 2;
+    this.amplitude = 90;
+    this.spacingFactor = 70;
+    this.useMesh = false;
 }
 
 function init() {
@@ -31,10 +32,12 @@ function init() {
     gui.add(options, "distanceFromScene", 0, 5000).onChange(changeDistance);
 
     const linesFolder = gui.addFolder("Lines");
-    linesFolder.add(options, "noOfLines", 0, 5000).onChange(updateLineMeshArray);
+    linesFolder.add(options, "numOfLines", 0, 5000).onChange(updateLineMeshArray);
     linesFolder.add(options, "numOfPoints", 0, 10000).onChange(updateLineMeshArray);
     linesFolder.add(options, "spacingFactor", 0, 100).onChange(updateLinePosition);
-    linesFolder.add(options, "lineWidth", 0, 100).onChange(updateLineMeshArray);
+    linesFolder.add(options, "lineWidth", 0, 100).onChange(function update() {
+        if (options.useMesh) { updateLineMeshArray(); }
+    });
     linesFolder.addColor(options, "lineColor").onChange(updateLineColor);
 
 
@@ -49,6 +52,8 @@ function init() {
     speedFolder.add(options, "xSmoothFactor", 0, 1000);
     speedFolder.add(options, "ySmoothFactor", 0, 1000);
     speedFolder.add(options, "amplitude", 0, 1000);
+
+    gui.add(options, "useMesh").onChange(updateLineMeshArray);
 
 
 
@@ -69,7 +74,7 @@ function init() {
     camera.updateProjectionMatrix();
 
     lineMeshes = [];
-    for (var i = 0; i < options.noOfLines; i++) {
+    for (var i = 0; i < options.numOfLines; i++) {
         var line = createLine(i);
         lineMeshes.push(line);
         scene.add(line);
@@ -110,25 +115,41 @@ function createLine(pos) {
     }
 
     const linePoints = new THREE.BufferGeometry().setFromPoints(new THREE.SplineCurve(points).getPoints(100));
-    const line = new MeshLine();
-    line.setGeometry(linePoints);
-    const geometry = line.geometry;
+    var line;
 
-    const material = new MeshLineMaterial({
-        lineWidth: options.lineWidth,
-        color: new THREE.Color(options.lineColor)
-    });
+    if (options.useMesh) {
+        const obj = new MeshLine();
+        obj.setGeometry(linePoints);
+        const geometry = obj.geometry;
 
-    var mesh = new THREE.Mesh(geometry, material);
-    mesh.position.x = -options.numOfPoints / 2;
-    mesh.position.y = pos * options.spacingFactor - options.noOfLines * options.spacingFactor / 2;
+        const material = new MeshLineMaterial({
+            lineWidth: options.lineWidth,
+            color: new THREE.Color(options.lineColor)
+        });
 
-    return mesh;
+        line = new THREE.Mesh(geometry, material);
+    } else {
+
+        const material = new THREE.LineBasicMaterial({
+            color: new THREE.Color(options.lineColor)
+        });
+
+        line = new THREE.Line(linePoints, material);
+        line.position.x = -options.numOfPoints / 2;
+        line.position.y = pos * options.spacingFactor - options.numOfLines * options.spacingFactor / 2;
+
+    }
+
+    line.position.x = -options.numOfPoints / 2;
+    line.position.y = pos * options.spacingFactor - options.numOfLines * options.spacingFactor / 2;
+
+    return line;
+
 }
 
 function updateLinePosition() {
     for (var i = 0; i < lineMeshes.length; i++) {
-        lineMeshes[i].position.y = i * options.spacingFactor - options.noOfLines * options.spacingFactor / 2;
+        lineMeshes[i].position.y = i * options.spacingFactor - options.numOfLines * options.spacingFactor / 2;
     }
 }
 
@@ -139,7 +160,7 @@ function updateLineMeshArray() {
         scene.remove(lineMeshes[i]);
     }
     lineMeshes = []
-    for (var i = 0; i < options.noOfLines; i++) {
+    for (var i = 0; i < options.numOfLines; i++) {
         var line = createLine(i);
         lineMeshes.push(line);
         scene.add(line);
