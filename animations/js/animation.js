@@ -176,6 +176,8 @@ function updateLineMeshArray() {
 
 function onWindowResize() {
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    options.distanceFromScene = canvas.clientWidth / camera.aspect;
+    changeDistance();
     camera.updateProjectionMatrix();
 
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
