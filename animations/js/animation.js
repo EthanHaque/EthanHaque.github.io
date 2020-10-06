@@ -2,12 +2,14 @@ var canvas, renderer, scene, camera;
 var points, lineMeshes;
 
 var options = function() {
-    this.numOfLines = 50;
-    this.numOfPoints = 8000;
+    this.numOfLines = Math.floor(canvas.clientHeight / 50);
+    this.numOfPoints = 500;
     this.lineColor = 0x000000;
     this.lineWidth = 1.5;
     this.backgroundColor = 0xffffff;
-    this.distanceFromScene = this.numOfPoints / 2;
+    this.distanceFromScene = canvas.clientHeight;
+    this.horizontal = 0;
+    this.vertical = 0;
     this.zRotation = 0;
     this.xRotation = 0;
     this.yRotation = 0;
@@ -21,6 +23,8 @@ var options = function() {
 }
 
 function init() {
+    window.addEventListener('resize', onWindowResize, false);
+
     canvas = document.querySelector("#canvas");
     noise.seed(2);
 
@@ -29,7 +33,11 @@ function init() {
     const gui = new dat.GUI({ autoPlace: true });
 
     gui.addColor(options, "backgroundColor").onChange(updateBackgroundColor);
-    gui.add(options, "distanceFromScene", 0, 5000).onChange(changeDistance);
+
+    const distanceFolder = gui.addFolder("distance");
+    distanceFolder.add(options, "distanceFromScene", 0, 5000).onChange(changeDistance);
+    distanceFolder.add(options, "horizontal", -5000, 5000).onChange(changeDistance);
+    distanceFolder.add(options, "vertical", -5000, 5000).onChange(changeDistance);
 
     const linesFolder = gui.addFolder("Lines");
     linesFolder.add(options, "numOfLines", 0, 5000).onChange(updateLineMeshArray);
@@ -62,7 +70,7 @@ function init() {
         antialias: true
     });
 
-    camera = new THREE.PerspectiveCamera(45, canvas.width / canvas.height, 1, 10000);
+    camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 1, 10000);
     camera.position.set(0, 0, options.distanceFromScene);
     camera.rotation.z = options.zRotation;
 
@@ -101,20 +109,20 @@ function updateBackgroundColor() {
 }
 
 function changeDistance() {
-    camera.position.set(0, 0, options.distanceFromScene);
+    camera.position.set(options.horizontal, options.vertical, options.distanceFromScene);
 }
 
 function createLine(pos) {
     points = [];
     for (var i = 0; i < options.numOfPoints; i++) {
         points.push(new THREE.Vector3(
-            i,
+            i * canvas.clientWidth / options.numOfPoints,
             0,
             0
         ));
     }
 
-    const linePoints = new THREE.BufferGeometry().setFromPoints(new THREE.SplineCurve(points).getPoints(500));
+    const linePoints = new THREE.BufferGeometry().setFromPoints(new THREE.SplineCurve(points).getPoints(options.numOfPoints));
     // const linePoints = new THREE.BufferGeometry().setFromPoints(points);
     var line;
 
@@ -136,12 +144,10 @@ function createLine(pos) {
         });
         linePoints.computeBoundingSphere();
         line = new THREE.Line(linePoints, material);
-        line.position.x = -options.numOfPoints / 2;
-        line.position.y = pos * options.spacingFactor - options.numOfLines * options.spacingFactor / 2;
 
     }
 
-    line.position.x = -options.numOfPoints / 2;
+    line.position.x = -canvas.clientWidth / 2;
     line.position.y = pos * options.spacingFactor - options.numOfLines * options.spacingFactor / 2;
 
     return line;
