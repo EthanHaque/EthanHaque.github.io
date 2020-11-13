@@ -71,10 +71,7 @@ function init() {
     request.send();
     request.onload = function () {
         data = request.response.presets;
-        var choice = data[Math.floor(Math.random() * data.length)];
-        console.log(choice)
-        readInSettings(choice);
-        console.log("done");
+        chooseSettings(data[Math.floor(Math.random() * data.length)]);
     }
 
 }
@@ -118,6 +115,17 @@ function createGUI() {
     gui.add({ importSettings: importSettings }, "importSettings");
 
     return gui;
+}
+
+// 3 am testing. Fix this.
+function chooseSettings(settings) {
+    readInSettings(settings);
+    updateLineMeshArray();
+    updateBackgroundColor();
+    changeDistance();
+    updateLineRotation();
+    updateLineColor();
+    updateGUI();
 }
 
 function importSettings() {
