@@ -64,13 +64,16 @@ function init() {
     stats.domElement.style.top = '0';
     document.body.appendChild(stats.domElement);
 
+    var data;
     var request = new XMLHttpRequest();
     request.open("GET", "https://ethanhaque.github.io/presets.json");
     request.responseType = 'json';
     request.send();
     request.onload = function () {
-        console.log(request.response);
+        data = request.response.presets;
     }
+
+    readInSettings(data[Math.floor(Math.random() * myShows.length)]);
 }
 
 function createGUI() {
