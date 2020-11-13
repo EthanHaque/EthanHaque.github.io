@@ -70,10 +70,10 @@ function init() {
     request.responseType = 'json';
     request.send();
     request.onload = function () {
-        data = request.response;//.presets
+        data = request.response;
     }
 
-    //readInSettings(data[Math.floor(Math.random() * data.length)]);
+    console.log(data);
 }
 
 function createGUI() {
