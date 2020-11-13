@@ -1,6 +1,0 @@
-{
-    "presets" : [
-        "numOfLines:19,numOfPoints:500,lineColor:5885287,lineWidth:34.63725659141823,backgroundColor:6567935,distanceFromScene:3165.6039979321044,horizontal:0,vertical:0,zRotation:0,xRotation:0,yRotation:0,xTimeSlowFactor:2515.9400310184387,yTimeSlowFactor:2074.788902291918,xSmoothFactor:114.76822333275892,ySmoothFactor:225.0560055143891,amplitude:511.8042391866276,spacingFactor:70,useMesh:true,importSettings:function importSettings() {    readInSummary();    updateLineMeshArray();    updateBackgroundColor();    changeDistance();    updateLineRotation();    updateLineColor();    updateSummaryBox();}",
-        ""
-    ]
-}
