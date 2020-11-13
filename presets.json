@@ -1,0 +1,7 @@
+{
+    "presets" : [
+    "numOfLines:1,numOfPoints:100,lineColor:16777215,lineWidth:0,backgroundColor:0,distanceFromScene:979,distanceScale:2,horizontal:0,vertical:0,zRotation:0,xRotation:0,yRotation:0,xTimeSlowFactor:8030.329140099949,yTimeSlowFactor:6486.300189557126,xSmoothFactor:4.480441151128726,ySmoothFactor:1,amplitude:258.14234016887815,spacingFactor:0,useMesh:false",
+    "numOfLines:77.54609684645872,numOfPoints:44.80441151128726,lineColor:16777215,lineWidth:0,backgroundColor:0,distanceFromScene:979,distanceScale:2,horizontal:0,vertical:0,zRotation:0,xRotation:0,yRotation:0,xTimeSlowFactor:8030.329140099949,yTimeSlowFactor:6486.300189557126,xSmoothFactor:4.480441151128726,ySmoothFactor:1,amplitude:622.0920213682579,spacingFactor:0,useMesh:false"
+    
+    ]
+}

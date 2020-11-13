@@ -1,45 +1,78 @@
 var canvas, renderer, scene, camera;
 var points, lineMeshes;
 var gui;
+var stats;
 
-var options = function() {
-    this.numOfLines = Math.floor(canvas.clientHeight / 50);
-    this.numOfPoints = 500;
-    this.lineColor = 0x000000;
-    this.lineWidth = 1.5;
-    this.backgroundColor = 0xffffff;
-    this.distanceFromScene = canvas.clientHeight;
-    this.horizontal = 0;
-    this.vertical = 0;
-    this.zRotation = 0;
-    this.xRotation = 0;
-    this.yRotation = 0;
-    this.xTimeSlowFactor = 1000;
-    this.yTimeSlowFactor = 1000;
-    this.xSmoothFactor = 2;
-    this.ySmoothFactor = 2;
-    this.amplitude = 90;
-    this.spacingFactor = 70;
-    this.useMesh = false;
-    this.importSettings = importSettings;
-    this.summary = "";
-}
+var options;
 
 function init() {
     window.addEventListener('resize', onWindowResize, false);
 
     canvas = document.querySelector("#canvas");
+
+    options = {
+        numOfLines: 0,
+        numOfPoints: 0,
+        lineColor: 0x000000,
+        lineWidth: 0,
+        backgroundColor: 0x000000,
+        distanceFromScene: 0,
+        distanceScale: 0,
+        horizontal: 0,
+        vertical: 0,
+        zRotation: 0,
+        xRotation: 0,
+        yRotation: 0,
+        xTimeSlowFactor: 0,
+        yTimeSlowFactor: 0,
+        xSmoothFactor: 0,
+        ySmoothFactor: 0,
+        amplitude: 0,
+        spacingFactor: 0,
+        useMesh: false,
+        settings: ""
+    }
     noise.seed(2);
 
-    options = new options();
-    createSummary();
+    updateSettings(options);
+    gui = createGUI();
 
-    gui = new dat.GUI({ autoPlace: true });
+    renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+
+    camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 1, 10000);
+    camera.position.set(0, 0, options.distanceFromScene);
+    camera.rotation.z = options.zRotation;
+
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(options.backgroundColor);
+
+    lineMeshes = [];
+    for (var i = 0; i < options.numOfLines; i++) {
+        var line = createLine(i);
+        lineMeshes.push(line);
+        scene.add(line);
+    }
+
+    stats = new Stats();
+    stats.setMode(0);
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0';
+    stats.domElement.style.top = '0';
+    document.body.appendChild(stats.domElement);
+}
+
+function createGUI() {
+    var gui = new dat.GUI({ autoPlace: true });
 
     gui.addColor(options, "backgroundColor").onChange(updateBackgroundColor);
 
     const distanceFolder = gui.addFolder("distance");
     distanceFolder.add(options, "distanceFromScene", 0, 5000).onChange(changeDistance);
+    distanceFolder.add(options, "distanceScale", 0, 100).onChange(changeDistance);
     distanceFolder.add(options, "horizontal", -5000, 5000).onChange(changeDistance);
     distanceFolder.add(options, "vertical", -5000, 5000).onChange(changeDistance);
 
@@ -59,58 +92,36 @@ function init() {
     rotationFolder.add(options, "zRotation", 0, 2 * Math.PI).onChange(updateLineRotation);
 
     const speedFolder = gui.addFolder("Speed");
-    speedFolder.add(options, "xTimeSlowFactor", 0, 20000).onChange(updateSummaryBox);
-    speedFolder.add(options, "yTimeSlowFactor", 0, 20000).onChange(updateSummaryBox);
-    speedFolder.add(options, "xSmoothFactor", 0, 1000).onChange(updateSummaryBox);
-    speedFolder.add(options, "ySmoothFactor", 0, 1000).onChange(updateSummaryBox);
-    speedFolder.add(options, "amplitude", 0, 1000).onChange(updateSummaryBox);
+    speedFolder.add(options, "xTimeSlowFactor", 0, 20000).onChange(updateGUI);
+    speedFolder.add(options, "yTimeSlowFactor", 0, 20000).onChange(updateGUI);
+    speedFolder.add(options, "xSmoothFactor", 0, 1000).onChange(updateGUI);
+    speedFolder.add(options, "ySmoothFactor", 0, 1000).onChange(updateGUI);
+    speedFolder.add(options, "amplitude", 0, 1000).onChange(updateGUI);
 
     gui.add(options, "useMesh").onChange(updateLineMeshArray);
 
-    gui.add(options, "summary");
-    gui.add(options, "importSettings");
+    gui.add(options, "settings");
+    gui.add({ importSettings: importSettings }, "importSettings");
 
-
-    renderer = new THREE.WebGLRenderer({
-        canvas,
-        antialias: true
-    });
-
-    camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 1, 10000);
-    camera.position.set(0, 0, options.distanceFromScene);
-    camera.rotation.z = options.zRotation;
-
-    scene = new THREE.Scene();
-    scene.background = new THREE.Color(options.backgroundColor);
-
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-    camera.aspect = canvas.clientWidth / canvas.clientHeight;
-    camera.updateProjectionMatrix();
-
-    lineMeshes = [];
-    for (var i = 0; i < options.numOfLines; i++) {
-        var line = createLine(i);
-        lineMeshes.push(line);
-        scene.add(line);
-    }
-
+    return gui;
 }
 
 function importSettings() {
-    readInSummary();
+    readInSettings(options.settings);
     updateLineMeshArray();
     updateBackgroundColor();
     changeDistance();
     updateLineRotation();
     updateLineColor();
-    updateSummaryBox();
+    updateGUI();
 }
 
-function updateSummaryBox() {
-    createSummary()
+function updateGUI() {
+    updateSettings(options);
     for (var i in gui.__controllers) {
         gui.__controllers[i].updateDisplay();
     }
+
     for (var i = 0; i < Object.keys(gui.__folders).length; i++) {
         var key = Object.keys(gui.__folders)[i];
         for (var j = 0; j < gui.__folders[key].__controllers.length; j++) {
@@ -120,18 +131,23 @@ function updateSummaryBox() {
 
 }
 
-function createSummary() {
-    var str = "";
+function createSettings(options) {
+    var settingsStr = "";
     for (var option in options) {
-        if (option !== "summary") {
-            str += option + ":" + options[option] + ","
+        if (option !== "settings") {
+            settingsStr += option + ":" + options[option] + ","
         }
     }
-    options.summary = str.slice(0, -1);
+    return settingsStr.slice(0, -1);
 }
 
-function readInSummary() {
-    var strArr = options.summary.split(",");
+function updateSettings(opts) {
+    var settings = createSettings(opts);
+    options.settings = settings;
+}
+
+function readInSettings(settings) {
+    var strArr = settings.split(",");
     for (var i = 0; i < strArr.length; i++) {
         var pair = strArr[i].split(":");
         if (!isNaN(parseFloat(pair[1]))) {
@@ -159,12 +175,12 @@ function updateLineColor() {
 
 function updateBackgroundColor() {
     scene.background.set(options.backgroundColor);
-    updateSummaryBox()
+    updateGUI()
 }
 
 function changeDistance() {
-    camera.position.set(options.horizontal, options.vertical, options.distanceFromScene);
-    updateSummaryBox()
+    camera.position.set(options.horizontal, options.vertical, options.distanceFromScene * options.distanceScale);
+    updateGUI()
 }
 
 function createLine(pos) {
@@ -177,7 +193,8 @@ function createLine(pos) {
         ));
     }
 
-    const linePoints = new THREE.BufferGeometry().setFromPoints(new THREE.SplineCurve(points).getPoints(options.numOfPoints));
+    const curve = new THREE.SplineCurve(points).getPoints(options.numOfPoints);
+    const linePoints = new THREE.BufferGeometry().setFromPoints(curve);
     // const linePoints = new THREE.BufferGeometry().setFromPoints(points);
     var line;
 
@@ -211,9 +228,9 @@ function createLine(pos) {
 
 function updateLinePosition() {
     for (var i = 0; i < lineMeshes.length; i++) {
-        lineMeshes[i].position.y = i * options.spacingFactor - options.numOfLines * options.spacingFactor / 2;
+        lineMeshes[i].position.y = options.spacingFactor * (i - options.numOfLines / 2);
     }
-    updateSummaryBox()
+    updateGUI()
 }
 
 function updateLineMeshArray() {
@@ -228,12 +245,12 @@ function updateLineMeshArray() {
         lineMeshes.push(line);
         scene.add(line);
     }
-    updateSummaryBox();
+    updateGUI();
 }
 
 function onWindowResize() {
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
-    options.distanceFromScene = canvas.clientWidth / camera.aspect;
+    options.distanceFromScene = options.distanceScale * canvas.clientWidth / camera.aspect;
     changeDistance();
     camera.updateProjectionMatrix();
 
@@ -264,6 +281,7 @@ function render(time) {
         lineMeshes[j].geometry.attributes.position.needsUpdate = true;
     }
 
+    stats.update();
 }
 
 function mainLoop() {
