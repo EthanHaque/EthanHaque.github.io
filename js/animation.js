@@ -71,9 +71,10 @@ function init() {
     request.send();
     request.onload = function () {
         data = request.response;
+        console.log(data);
+
     }
 
-    console.log(data);
 }
 
 function createGUI() {
