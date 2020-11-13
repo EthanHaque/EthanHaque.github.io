@@ -63,6 +63,14 @@ function init() {
     stats.domElement.style.left = '0';
     stats.domElement.style.top = '0';
     document.body.appendChild(stats.domElement);
+
+    var request = new XMLHttpRequest();
+    request.open("GET", "https://ethanhaque.github.io/presets.json");
+    request.responseType = 'json';
+    request.send();
+    request.onload = function () {
+        console.log(request.response);
+    }
 }
 
 function createGUI() {
