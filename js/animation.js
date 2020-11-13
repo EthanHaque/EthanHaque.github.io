@@ -73,7 +73,7 @@ function init() {
         data = request.response.presets;
     }
 
-    readInSettings(data[Math.floor(Math.random() * myShows.length)]);
+    readInSettings(data[Math.floor(Math.random() * data.length)]);
 }
 
 function createGUI() {
