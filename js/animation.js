@@ -71,8 +71,10 @@ function init() {
     request.send();
     request.onload = function () {
         data = request.response.presets;
-        readInSettings(data[Math.floor(Math.random() * data.length)]);
-
+        var choice = data[Math.floor(Math.random() * data.length)];
+        console.log(choice)
+        readInSettings(choice);
+        console.log("done");
     }
 
 }
