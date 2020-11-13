@@ -70,8 +70,8 @@ function init() {
     request.responseType = 'json';
     request.send();
     request.onload = function () {
-        data = request.response;
-        console.log(data);
+        data = request.response.presets;
+        readInSettings(data[Math.floor(Math.random() * data.length)]);
 
     }
 
