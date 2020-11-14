@@ -51,11 +51,6 @@ function init() {
     scene.background = new THREE.Color(options.backgroundColor);
 
     lineMeshes = [];
-    for (var i = 0; i < options.numOfLines; i++) {
-        var line = createLine(i);
-        lineMeshes.push(line);
-        scene.add(line);
-    }
 
     stats = new Stats();
     stats.setMode(0);
@@ -64,14 +59,15 @@ function init() {
     stats.domElement.style.top = '0';
     document.body.appendChild(stats.domElement);
 
-    var data;
     var request = new XMLHttpRequest();
     request.open("GET", "https://ethanhaque.github.io/presets.json");
     request.responseType = 'json';
     request.send();
     request.onload = function () {
         data = request.response.presets;
-        chooseSettings(data[Math.floor(Math.random() * data.length)]);
+        var choice = data[Math.floor(Math.random() * data.length)]
+        options.settings = choice;
+        importSettings();
     }
 
 }
@@ -115,17 +111,6 @@ function createGUI() {
     gui.add({ importSettings: importSettings }, "importSettings");
 
     return gui;
-}
-
-// 3 am testing. Fix this.
-function chooseSettings(settings) {
-    readInSettings(settings);
-    updateLineMeshArray();
-    updateBackgroundColor();
-    changeDistance();
-    updateLineRotation();
-    updateLineColor();
-    updateGUI();
 }
 
 function importSettings() {
@@ -241,18 +226,11 @@ function createLine(pos) {
 
     }
 
-    line.position.x = -canvas.clientWidth / 2;
+    line.position.x = -canvas.clientWidth / 2 + canvas.clientWidth / options.numOfPoints / 2;
     line.position.y = pos * options.spacingFactor - options.numOfLines * options.spacingFactor / 2;
 
     return line;
 
-}
-
-function updateLinePosition() {
-    for (var i = 0; i < lineMeshes.length; i++) {
-        lineMeshes[i].position.y = options.spacingFactor * (i - options.numOfLines / 2);
-    }
-    updateGUI()
 }
 
 function updateLineMeshArray() {
@@ -270,6 +248,13 @@ function updateLineMeshArray() {
     updateGUI();
 }
 
+function updateLinePosition() {
+    for (var i = 0; i < lineMeshes.length; i++) {
+        lineMeshes[i].position.y = options.spacingFactor * (i - options.numOfLines / 2);
+    }
+    updateGUI()
+}
+
 function onWindowResize() {
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
     options.distanceFromScene = options.distanceScale * canvas.clientWidth / camera.aspect;
@@ -277,16 +262,6 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-
-}
-
-function animate(time) {
-    requestAnimationFrame(animate);
-
-
-    render(time);
-
-    renderer.render(scene, camera);
 
 }
 
@@ -304,6 +279,13 @@ function render(time) {
     }
 
     stats.update();
+}
+
+function animate(time) {
+    requestAnimationFrame(animate);
+    render(time);
+
+    renderer.render(scene, camera);
 }
 
 function mainLoop() {
