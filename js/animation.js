@@ -256,17 +256,11 @@ function updateLinePosition() {
 }
 
 function onWindowResize() {
-    camera.aspect = canvas.clientWidth / canvas.clientHeight;
-    options.distanceFromScene = options.distanceScale * canvas.clientWidth / camera.aspect;
-    changeDistance();
-    camera.updateProjectionMatrix();
-
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
 
 }
 
 function render(time) {
-
     for (var j = 0; j < lineMeshes.length; j++) {
         var positions = lineMeshes[j].geometry.attributes.position.array;
         for (var i = 0; i < positions.length / 3; i++) {
