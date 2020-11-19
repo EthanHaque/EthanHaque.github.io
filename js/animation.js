@@ -35,7 +35,14 @@ function init() {
     noise.seed(2);
 
     updateSettings(options);
-    gui = createGUI();
+    // gui = createGUI();
+    
+    // stats = new Stats();
+    // stats.setMode(0);
+    // stats.domElement.style.position = 'absolute';
+    // stats.domElement.style.left = '0';
+    // stats.domElement.style.top = '0';
+    // document.body.appendChild(stats.domElement);
 
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 
@@ -51,13 +58,6 @@ function init() {
     scene.background = new THREE.Color(options.backgroundColor);
 
     lineMeshes = [];
-
-    stats = new Stats();
-    stats.setMode(0);
-    stats.domElement.style.position = 'absolute';
-    stats.domElement.style.left = '0';
-    stats.domElement.style.top = '0';
-    document.body.appendChild(stats.domElement);
 
     var request = new XMLHttpRequest();
     request.open("GET", "https://ethanhaque.github.io/presets.json");
@@ -120,7 +120,7 @@ function importSettings() {
     changeDistance();
     updateLineRotation();
     updateLineColor();
-    updateGUI();
+    // updateGUI();
 }
 
 function updateGUI() {
@@ -182,12 +182,12 @@ function updateLineColor() {
 
 function updateBackgroundColor() {
     scene.background.set(options.backgroundColor);
-    updateGUI()
+    // updateGUI()
 }
 
 function changeDistance() {
     camera.position.set(options.horizontal, options.vertical, options.distanceFromScene * options.distanceScale);
-    updateGUI()
+    // updateGUI()
 }
 
 function createLine(pos) {
@@ -245,14 +245,14 @@ function updateLineMeshArray() {
         lineMeshes.push(line);
         scene.add(line);
     }
-    updateGUI();
+    // updateGUI();
 }
 
 function updateLinePosition() {
     for (var i = 0; i < lineMeshes.length; i++) {
         lineMeshes[i].position.y = options.spacingFactor * (i - options.numOfLines / 2);
     }
-    updateGUI()
+    // updateGUI()
 }
 
 function onWindowResize() {
@@ -272,7 +272,7 @@ function render(time) {
         lineMeshes[j].geometry.attributes.position.needsUpdate = true;
     }
 
-    stats.update();
+    // stats.update();
 }
 
 function animate(time) {

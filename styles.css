@@ -77,7 +77,7 @@ a:hover::before {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    width: 45vw;
+    width: 50vw;
 }
 
 .column {
