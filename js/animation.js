@@ -2,8 +2,9 @@ var canvas, renderer, scene, camera;
 var points, lineMeshes;
 var gui;
 var stats;
-
 var options;
+
+var testing = false;
 
 function init() {
     window.addEventListener('resize', onWindowResize, false);
@@ -35,13 +36,16 @@ function init() {
     noise.seed(2);
 
     updateSettings(options);
-    // gui = createGUI();
-    // stats = new Stats();
-    // stats.setMode(0);
-    // stats.domElement.style.position = 'absolute';
-    // stats.domElement.style.left = '0';
-    // stats.domElement.style.top = '0';
-    // document.body.appendChild(stats.domElement);
+    if (testing) {
+        gui = createGUI();
+        stats = new Stats();
+        stats.setMode(0);
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.left = '0';
+        stats.domElement.style.top = '0';
+        document.body.appendChild(stats.domElement); 
+    }
+    
 
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 
@@ -123,7 +127,7 @@ function importSettings() {
     changeDistance();
     updateLineRotation();
     updateLineColor();
-    // updateGUI();
+    if (testing) { updateGUI(); }
 }
 
 function updateGUI() {
@@ -185,12 +189,12 @@ function updateLineColor() {
 
 function updateBackgroundColor() {
     scene.background.set(options.backgroundColor);
-    // updateGUI()
+    if (testing) { updateGUI() }
 }
 
 function changeDistance() {
     camera.position.set(options.horizontal, options.vertical, options.distanceFromScene * options.distanceScale);
-    // updateGUI()
+    if (testing) { updateGUI() }
 }
 
 function createLine(pos) {
@@ -248,14 +252,14 @@ function updateLineMeshArray() {
         lineMeshes.push(line);
         scene.add(line);
     }
-    // updateGUI();
+    if (testing) { updateGUI(); }
 }
 
 function updateLinePosition() {
     for (var i = 0; i < lineMeshes.length; i++) {
         lineMeshes[i].position.y = options.spacingFactor * (i - options.numOfLines / 2);
     }
-    // updateGUI()
+    if (testing) { updateGUI(); }
 }
 
 function onWindowResize() {
@@ -282,7 +286,7 @@ function render(time) {
         lineMeshes[j].geometry.attributes.position.needsUpdate = true;
     }
 
-    // stats.update();
+    if (testing) { stats.update(); }
 }
 
 function animate(time) {
