@@ -133,6 +133,7 @@ function importSettings() {
     readInSettings(options.settings);
     updateLineMeshArray();
     updateBackgroundColor();
+    updateTextColor();
     changeDistance();
     updateLineRotation();
     updateLineColor();
