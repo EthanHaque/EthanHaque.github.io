@@ -35,14 +35,13 @@ function init() {
     noise.seed(2);
 
     updateSettings(options);
-    // gui = createGUI();
-    
-    // stats = new Stats();
-    // stats.setMode(0);
-    // stats.domElement.style.position = 'absolute';
-    // stats.domElement.style.left = '0';
-    // stats.domElement.style.top = '0';
-    // document.body.appendChild(stats.domElement);
+    gui = createGUI();
+    stats = new Stats();
+    stats.setMode(0);
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0';
+    stats.domElement.style.top = '0';
+    document.body.appendChild(stats.domElement);
 
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 
@@ -51,7 +50,6 @@ function init() {
     camera.rotation.z = options.zRotation;
 
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-    renderer.setPixelRatio(window.devicePixelRatio);
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
     camera.updateProjectionMatrix();
 
@@ -69,6 +67,10 @@ function init() {
         var choice = data[Math.floor(Math.random() * data.length)]
         options.settings = choice;
         importSettings();
+        if (canvas.clientWidth <= 800) {
+            options.distanceScale = 1;
+            changeDistance();
+        }
     }
 
 }
@@ -121,7 +123,7 @@ function importSettings() {
     changeDistance();
     updateLineRotation();
     updateLineColor();
-    // updateGUI();
+    updateGUI();
 }
 
 function updateGUI() {
@@ -183,12 +185,12 @@ function updateLineColor() {
 
 function updateBackgroundColor() {
     scene.background.set(options.backgroundColor);
-    // updateGUI()
+    updateGUI()
 }
 
 function changeDistance() {
     camera.position.set(options.horizontal, options.vertical, options.distanceFromScene * options.distanceScale);
-    // updateGUI()
+    updateGUI()
 }
 
 function createLine(pos) {
@@ -246,19 +248,26 @@ function updateLineMeshArray() {
         lineMeshes.push(line);
         scene.add(line);
     }
-    // updateGUI();
+    updateGUI();
 }
 
 function updateLinePosition() {
     for (var i = 0; i < lineMeshes.length; i++) {
         lineMeshes[i].position.y = options.spacingFactor * (i - options.numOfLines / 2);
     }
-    // updateGUI()
+    updateGUI()
 }
 
 function onWindowResize() {
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-
+    if (canvas.clientWidth <= 800) {
+        options.distanceScale = 1;
+        changeDistance();
+    }
+    else {
+        options.distanceScale = 2;
+        changeDistance();
+    }
 }
 
 function render(time) {
@@ -273,7 +282,7 @@ function render(time) {
         lineMeshes[j].geometry.attributes.position.needsUpdate = true;
     }
 
-    // stats.update();
+    stats.update();
 }
 
 function animate(time) {
