@@ -3,6 +3,7 @@ var points, lineMeshes;
 var gui;
 var stats;
 var options;
+var orgOptions
 
 var testing = true;
 
@@ -46,11 +47,14 @@ function init() {
         stats.domElement.style.position = 'absolute';
         stats.domElement.style.left = '0';
         stats.domElement.style.top = '0';
-        document.body.appendChild(stats.domElement); 
+        document.body.appendChild(stats.domElement);
     }
-    
 
-    renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+
+    renderer = new THREE.WebGLRenderer({
+        canvas,
+        antialias: true
+    });
 
     camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 1, 10000);
     camera.position.set(0, 0, options.distanceFromScene);
@@ -74,16 +78,20 @@ function init() {
         var choice = data[Math.floor(Math.random() * data.length)]
         options.settings = choice;
         importSettings();
+        orgOptions = JSON.parse(JSON.stringify(options));
         if (canvas.clientWidth <= 800) {
             options.distanceScale = 1;
             changeDistance();
         }
     }
 
+
 }
 
 function createGUI() {
-    var gui = new dat.GUI({ autoPlace: true });
+    var gui = new dat.GUI({
+        autoPlace: true
+    });
 
     gui.addColor(options, "backgroundColor").onChange(updateBackgroundColor);
 
@@ -104,7 +112,9 @@ function createGUI() {
     linesFolder.add(options, "numOfPoints", 0, 10000).onChange(updateLineMeshArray);
     linesFolder.add(options, "spacingFactor", 0, 100).onChange(updateLinePosition);
     linesFolder.add(options, "lineWidth", 0, 100).onChange(function update() {
-        if (options.useMesh) { updateLineMeshArray(); }
+        if (options.useMesh) {
+            updateLineMeshArray();
+        }
     });
     linesFolder.addColor(options, "lineColor").onChange(updateLineColor);
 
@@ -124,7 +134,9 @@ function createGUI() {
     gui.add(options, "useMesh").onChange(updateLineMeshArray);
 
     gui.add(options, "settings");
-    gui.add({ importSettings: importSettings }, "importSettings");
+    gui.add({
+        importSettings: importSettings
+    }, "importSettings");
 
     return gui;
 }
@@ -137,7 +149,9 @@ function importSettings() {
     changeDistance();
     updateLineRotation();
     updateLineColor();
-    if (testing) { updateGUI(); }
+    if (testing) {
+        updateGUI();
+    }
 }
 
 function updateGUI() {
@@ -176,8 +190,8 @@ function readInSettings(settings) {
         var pair = strArr[i].split(":");
         if (!isNaN(parseFloat(pair[1]))) {
             options[pair[0]] = parseFloat(pair[1]);
-        } else if (pair[0] === "true" || pair[0] === "false") {
-            options[pair[0]] = (pair[0] === "true" ? true : false);
+        } else if (pair[1] === "true" || pair[1] === "false") {
+            options[pair[0]] = (pair[1] === "true" ? true : false);
         }
     }
 
@@ -199,7 +213,9 @@ function updateLineColor() {
 
 function updateBackgroundColor() {
     scene.background.set(options.backgroundColor);
-    if (testing) { updateGUI() }
+    if (testing) {
+        updateGUI()
+    }
 }
 
 function updateTextColor() {
@@ -217,14 +233,19 @@ function updateTextColor() {
     }
 
     for (var i = 0; i < smallTextColor.length; i++) {
-        smallTextColor[i].style.color = "#"+options.smallTextColor.toString(16);
+        smallTextColor[i].style.color = "#" + options.smallTextColor.toString(16);
     }
-    if (testing) { updateGUI() }
+
+    if (testing) {
+        updateGUI()
+    }
 }
 
 function changeDistance() {
     camera.position.set(options.horizontal, options.vertical, options.distanceFromScene * options.distanceScale);
-    if (testing) { updateGUI() }
+    if (testing) {
+        updateGUI()
+    }
 }
 
 function createLine(pos) {
@@ -282,25 +303,34 @@ function updateLineMeshArray() {
         lineMeshes.push(line);
         scene.add(line);
     }
-    if (testing) { updateGUI(); }
+    if (testing) {
+        updateGUI();
+    }
 }
 
 function updateLinePosition() {
     for (var i = 0; i < lineMeshes.length; i++) {
         lineMeshes[i].position.y = options.spacingFactor * (i - options.numOfLines / 2);
     }
-    if (testing) { updateGUI(); }
+    if (testing) {
+        updateGUI();
+    }
 }
 
 function onWindowResize() {
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
     if (canvas.clientWidth <= 800) {
-        options.distanceScale = 1;
+        options.distanceScale = orgOptions.distanceScale / 2;
         changeDistance();
-    }
-    else {
-        options.distanceScale = 2;
+        if (testing) {
+            updateGUI();
+        }
+    } else {
+        options.distanceScale = orgOptions.distanceScale;
         changeDistance();
+        if (testing) {
+            updateGUI();
+        }
     }
 }
 
@@ -316,7 +346,9 @@ function render(time) {
         lineMeshes[j].geometry.attributes.position.needsUpdate = true;
     }
 
-    if (testing) { stats.update(); }
+    if (testing) {
+        stats.update();
+    }
 }
 
 function animate(time) {

@@ -1,6 +1,6 @@
 {
     "presets": [
-        "numOfLines:20,numOfPoints:200,lineColor:9013641,lineWidth:15.8883336205411,backgroundColor:4276545,distanceFromScene:1180.4239186627606,distanceScale:2,horizontal:0,vertical:0,zRotation:0,xRotation:0,yRotation:0,xTimeSlowFactor:6706.875753920386,yTimeSlowFactor:6486.300189557126,xSmoothFactor:37.56677580561779,ySmoothFactor:147.85455798724797,amplitude:379.45890056867137,spacingFactor:0,useMesh:false",
+        "bigTextColor:5592405,bigTextShadowColor:5592405,smallTextColor:13948116,numOfLines:20,numOfPoints:200,lineColor:9013641,lineWidth:15.8883336205411,backgroundColor:4276545,distanceFromScene:1180.4239186627606,distanceScale:2,horizontal:0,vertical:0,zRotation:0,xRotation:0,yRotation:0,xTimeSlowFactor:6706.875753920386,yTimeSlowFactor:6486.300189557126,xSmoothFactor:37.56677580561779,ySmoothFactor:147.85455798724797,amplitude:379.45890056867137,spacingFactor:0,useMesh:false",
         "bigTextColor:10051292,bigTextShadowColor:10383050,smallTextColor:12942789,numOfLines:20,numOfPoints:200,lineColor:14899427,lineWidth:15.8883336205411,backgroundColor:9457088,distanceFromScene:1180.4239186627606,distanceScale:2,horizontal:0,vertical:0,zRotation:0,xRotation:0,yRotation:0,xTimeSlowFactor:2515.9400310184387,yTimeSlowFactor:4501.120110287782,xSmoothFactor:37.56677580561779,ySmoothFactor:147.85455798724797,amplitude:379.45890056867137,spacingFactor:54.48905738411166,useMesh:false"
     ],
 
