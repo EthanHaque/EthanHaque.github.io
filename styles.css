@@ -50,35 +50,72 @@ a:hover::before {
     transform: scaleX(.75);
 }
 
-.big {
-    font-size: 12vw;
-    color: rgb(85, 85, 85);
-    text-shadow:
-        0 1px 0 #555555,
-        0 2px 0 #454545,
-        0 3px 0 #444444,
-        0 4px 0 #353535,
-        0 5px 0 #333333,
-        0 6px 1px rgba(0, 0, 0, .1),
-        0 0 5px rgba(0, 0, 0, .1),
-        0 1px 3px rgba(0, 0, 0, .3),
-        0 3px 5px rgba(0, 0, 0, .2),
-        0 5px 10px rgba(0, 0, 0, .25),
-        0 10px 10px rgba(0, 0, 0, .2),
-        0 20px 20px rgba(0, 0, 0, .15);
+@media (max-width: 800px) {
+    .small {
+        font-size: 3vw;
+        color: rgb(214, 214, 214);
+    }
+
+    .big {
+        font-size: 20vw;
+        color: rgb(85, 85, 85);
+        text-shadow:
+            0 1px 0 #555555,
+            0 2px 0 #454545,
+            0 3px 0 #444444,
+            0 4px 0 #353535,
+            0 5px 0 #333333,
+            0 6px 1px rgba(0, 0, 0, .1),
+            0 0 5px rgba(0, 0, 0, .1),
+            0 1px 3px rgba(0, 0, 0, .3),
+            0 3px 5px rgba(0, 0, 0, .2),
+            0 5px 10px rgba(0, 0, 0, .25),
+            0 10px 10px rgba(0, 0, 0, .2),
+            0 20px 20px rgba(0, 0, 0, .15);
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 90vw;
+    }
 }
 
-.small {
-    font-size: 1.5vw;
-    color: rgb(214, 214, 214);
+@media (min-width: 801px) {
+    .small {
+        font-size: 1.5vw;
+        color: rgb(214, 214, 214);
+    }
+
+    .big {
+        font-size: 12vw;
+        color: rgb(85, 85, 85);
+        text-shadow:
+            0 1px 0 #555555,
+            0 2px 0 #454545,
+            0 3px 0 #444444,
+            0 4px 0 #353535,
+            0 5px 0 #333333,
+            0 6px 1px rgba(0, 0, 0, .1),
+            0 0 5px rgba(0, 0, 0, .1),
+            0 1px 3px rgba(0, 0, 0, .3),
+            0 3px 5px rgba(0, 0, 0, .2),
+            0 5px 10px rgba(0, 0, 0, .25),
+            0 10px 10px rgba(0, 0, 0, .2),
+            0 20px 20px rgba(0, 0, 0, .15);
+    }
+
+    .row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 50vw;
+    }
 }
 
-.row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 50vw;
-}
+
+
 
 .column {
     display: flex;
