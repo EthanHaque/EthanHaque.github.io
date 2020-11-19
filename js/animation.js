@@ -267,7 +267,7 @@ function render(time) {
             var x = i / options.xSmoothFactor + time / options.xTimeSlowFactor
             var y = j / options.ySmoothFactor + time / options.yTimeSlowFactor
 
-            positions[i * 3 + 1] = options.amplitude * noise.perlin2(x, y) + 1;
+            positions[i * 3 + 1] = options.amplitude * noise.perlin2(x, y);
         }
         lineMeshes[j].geometry.attributes.position.needsUpdate = true;
     }
