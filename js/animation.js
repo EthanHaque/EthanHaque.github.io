@@ -51,7 +51,7 @@ function init() {
     camera.rotation.z = options.zRotation;
 
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
-    renderer.setPixelRatio( window.devicePixelRatio );
+    renderer.setPixelRatio(window.devicePixelRatio);
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
     camera.updateProjectionMatrix();
 
