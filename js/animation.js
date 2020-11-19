@@ -4,7 +4,7 @@ var gui;
 var stats;
 var options;
 
-var testing = false;
+var testing = true;
 
 function init() {
     window.addEventListener('resize', onWindowResize, false);
@@ -12,6 +12,9 @@ function init() {
     canvas = document.querySelector("#canvas");
 
     options = {
+        bigTextColor: 0x000000,
+        bigTextShadowColor: 0x000000,
+        smallTextColor: 0x000000,
         numOfLines: 0,
         numOfPoints: 0,
         lineColor: 0x000000,
@@ -83,6 +86,12 @@ function createGUI() {
     var gui = new dat.GUI({ autoPlace: true });
 
     gui.addColor(options, "backgroundColor").onChange(updateBackgroundColor);
+
+    const textFolder = gui.addFolder("text");
+    textFolder.addColor(options, "bigTextColor").onChange(updateTextColor);
+    textFolder.addColor(options, "bigTextShadowColor").onChange(updateTextColor);
+    textFolder.addColor(options, "smallTextColor").onChange(updateTextColor);
+
 
     const distanceFolder = gui.addFolder("distance");
     distanceFolder.add(options, "distanceFromScene", 0, 5000).onChange(changeDistance);
@@ -189,6 +198,26 @@ function updateLineColor() {
 
 function updateBackgroundColor() {
     scene.background.set(options.backgroundColor);
+    if (testing) { updateGUI() }
+}
+
+function updateTextColor() {
+    bigText = document.getElementsByClassName("big");
+    smallTextColor = document.getElementsByClassName("small");
+    var diff = 0x050505;
+    for (var i = 0; i < bigText.length; i++) {
+        bigText[i].style.color = "#" + options.bigTextColor.toString(16);
+        var textShadowColor1 = options.bigTextShadowColor;
+        var textShadowColor2 = (textShadowColor1 - diff);
+        var textShadowColor3 = (textShadowColor2 - diff);
+        var textShadowColor4 = (textShadowColor3 - diff);
+        var textShadowColor5 = (textShadowColor4 - diff);
+        bigText[i].style.textShadow = `0 1px 0 ${"#" + textShadowColor1.toString(16)}, 0 2px 0 ${"#" + textShadowColor2.toString(16)}, 0 3px 0 ${"#" + textShadowColor3.toString(16)}, 0 4px 0 ${"#" + textShadowColor4.toString(16)}, 0 5px 0 ${"#" + textShadowColor5.toString(16)}, 0 6px 1px rgba(0, 0, 0, .1), 0 0 5px rgba(0, 0, 0, .1), 0 1px 3px rgba(0, 0, 0, .3), 0 3px 5px rgba(0, 0, 0, .2), 0 5px 10px rgba(0, 0, 0, .25), 0 10px 10px rgba(0, 0, 0, .2), 0 20px 20px rgba(0, 0, 0, .15)`;
+    }
+
+    for (var i = 0; i < smallTextColor.length; i++) {
+        smallTextColor[i].style.color = "#"+options.smallTextColor.toString(16);
+    }
     if (testing) { updateGUI() }
 }
 
