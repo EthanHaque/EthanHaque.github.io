@@ -118,7 +118,6 @@ function createGUI() {
     });
     linesFolder.addColor(options, "lineColor").onChange(updateLineColor);
 
-
     const rotationFolder = gui.addFolder("Rotation");
     rotationFolder.add(options, "xRotation", 0, 2 * Math.PI).onChange(updateLineRotation);
     rotationFolder.add(options, "yRotation", 0, 2 * Math.PI).onChange(updateLineRotation);
@@ -221,6 +220,7 @@ function updateBackgroundColor() {
 function updateTextColor() {
     bigText = document.getElementsByClassName("big");
     smallTextColor = document.getElementsByClassName("small");
+    anchors = document.getElementsByTagName("a");
     var diff = 0x050505;
     for (var i = 0; i < bigText.length; i++) {
         bigText[i].style.color = "#" + options.bigTextColor.toString(16);
