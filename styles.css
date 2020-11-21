@@ -28,8 +28,11 @@ html {
 }
 
 a {
-    position: relative;
     text-decoration: none;
+}
+
+.small-a {
+    position: relative;
 }
 
 .grow {
@@ -37,7 +40,7 @@ a {
 }
 
 .grow:hover {
-    transform: scale(1.25);
+    transform: scale(1.3);
 }
 
 .small {
