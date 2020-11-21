@@ -1,3 +1,6 @@
+// Variable Line animation using Three.js
+// Copyright 2020 Ethan Haque 
+
 var canvas, renderer, scene, camera;
 var points, lineMeshes;
 var gui;
