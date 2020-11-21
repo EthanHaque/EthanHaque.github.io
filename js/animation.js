@@ -8,7 +8,7 @@ var stats;
 var options;
 var orgOptions
 
-var testing = false;
+var testing = true;
 
 function init() {
     window.addEventListener('resize', onWindowResize, false);
